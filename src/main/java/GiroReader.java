@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.Statement;
 
 public class GiroReader {
+    //test
     public static void main(String[] args) {
         try {
             String filePath = "/home/tim/Documents/giroMutaties/15-07-2015_15-08-2015.csv", line, mutatie[], colString ="", header[];
