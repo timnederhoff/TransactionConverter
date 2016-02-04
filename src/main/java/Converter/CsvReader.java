@@ -9,33 +9,30 @@ import java.util.List;
 public class CsvReader {
 
     private String inputFilePath;
-    private String[] header;
-    BufferedReader br;
+    private BufferedReader br;
 
     public void setInputFilePath(String inputFilePath) {
         this.inputFilePath = inputFilePath;
     }
 
-    public String getHeader() throws IOException {
-        String colString = "";
+    public String[] getHeader() throws IOException {
         br = new BufferedReader(new FileReader(inputFilePath));
-        header = br.readLine().split("\",\"");
-        for (String x : header) {
-            colString += x.toUpperCase().replace("\"","") + " TEXT,";
+        String[] header = br.readLine().split("\",\"");
+        for (int i = 0; i < header.length; i++) {
+            header[i] = header[i].replaceAll("[()\"]", "");
+            header[i] = header[i].replace(" ", "_");
         }
-        colString = colString.substring(0,colString.length()-1);
-        colString = colString.replace(" ", "_");
-        colString = colString.replace("(", "");
-        colString = colString.replace(")", "");
-        return colString;
+        return header;
     }
 
     public List<String[]> getData() throws IOException {
         String line;
-        List<String[]> mutaties = new ArrayList<String[]>();
+        List<String[]> mutaties = new ArrayList<>();
         while ((line = br.readLine()) != null) {
-            mutaties.add(line.split("\",\""));
+            line = line.replace("\'", "");
+            mutaties.add(line.split("(?<=\"),(?=\")"));
         }
+        br.close();
         return mutaties;
     }
 }
