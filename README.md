@@ -2,6 +2,11 @@
 
 This repository contains code for a converter to convert a csv file to a SQLite database file. The header is read out and used as table columns in the table named MUTATIONS. All header names are imported as TEXT data type. 
 
+## Features
+* converts comma separated file to a SQLite database
+* parameters for input file and output file
+* usage description printed when parameters are incorrect
+
 ## Install
 Generate a java executable jar.
 ```
@@ -13,11 +18,10 @@ $ mvn package
 ## Usage
 Run with:
 ```
-$ java -jar TransactionConverter.jar /path/to/inputfile.csv
+$ java -jar TransactionConverter.jar -i /path/to/inputfile.csv -o /path/to/outputfile.db
 ```
  
 ## Todo's
 * set nummeric data in a column of data type nummeric/int/double
 * make use of a data layout scheme. E.g. a XML describing the headers and their data type
-* add parameter for output file(path)
 * include templates for different banks (and their formats of the transactions export file)
