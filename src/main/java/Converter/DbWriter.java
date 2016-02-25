@@ -1,11 +1,12 @@
 package Converter;
 
+import java.io.File;
+import java.nio.file.Files;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
-//import org.sqlite.JDBC;
 
 public class DbWriter {
 
@@ -23,6 +24,8 @@ public class DbWriter {
     }
 
     public void startConnection() throws Exception{
+        File outputPath = new File(outputName);
+        Files.deleteIfExists(outputPath.toPath());
         Class.forName("org.sqlite.JDBC");
         c = DriverManager.getConnection("jdbc:sqlite:" + outputName);
         c.setAutoCommit(false);
@@ -41,7 +44,6 @@ public class DbWriter {
     private void addToDB(String[] mutatie) throws Exception{
         String sql = "INSERT INTO " + tableName + " (" + arrayToCsv(header) + ") " +
                 "VALUES (" + arrayToCsv(mutatie) + ");";
-        System.out.println(mutationCounter + " > " + sql);
         stmt.executeUpdate(sql);
     }
 
