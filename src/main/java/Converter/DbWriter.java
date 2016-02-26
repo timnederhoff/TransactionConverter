@@ -15,12 +15,10 @@ public class DbWriter {
     private String[] header;
     private String tableName;
     private Statement stmt;
-    private int mutationCounter;
 
     public DbWriter(String outputName) {
         this.outputName = outputName;
         tableName = "MUTATIONS";
-        mutationCounter = 0;
     }
 
     public void startConnection() throws Exception{
@@ -35,7 +33,6 @@ public class DbWriter {
         stmt = c.createStatement();
         for (String[] mutatie : mutaties) {
             addToDB(mutatie);
-            mutationCounter++;
         }
         stmt.close();
         c.commit();
@@ -61,10 +58,6 @@ public class DbWriter {
             snake += "'" + x.replace("\"", "") + "', ";
         }
         return snake.substring(0,snake.length()-2);
-    }
-
-    public int getMutationCounter() {
-        return mutationCounter;
     }
 
     public void closeConnection() {
