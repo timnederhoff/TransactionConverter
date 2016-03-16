@@ -6,6 +6,7 @@ This repository contains code for a converter to convert a csv file to a SQLite 
 * converts comma separated file to a SQLite database
 * parameters for input file and output file
 * usage description printed when parameters are incorrect
+* usage of configuration file to select and set the columns
 
 ## Install
 Generate a java executable jar.
@@ -22,6 +23,5 @@ $ java -jar TransactionConverter.jar -i /path/to/inputfile.csv -o /path/to/outpu
 ```
  
 ## Todo's
-* set nummeric data in a column of data type nummeric/int/double
 * make use of a data layout scheme. E.g. a XML describing the headers and their data type
 * include templates for different banks (and their formats of the transactions export file)

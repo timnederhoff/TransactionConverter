@@ -9,6 +9,9 @@ public class ConverterParameters {
     @Parameter(names = { "-o", "-outputfile" }, description = "The location of the output file", required = false)
     private String outputName  = "target/generated_db.db";
 
+    @Parameter(names = { "-c", "-configuration" }, description = "Location of the configuration file", required = false)
+    private String configPath = "";
+
     public String getInputName() {
         return inputName;
     }
@@ -16,5 +19,7 @@ public class ConverterParameters {
     public String getOutputName() {
         return outputName;
     }
+
+    public String getConfigPath() { return configPath; }
 
 }

@@ -3,9 +3,11 @@ package Converter;
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.ParameterException;
 
+import java.util.Map;
+
 public class MutationConverter {
 
-    static String[] header;
+    static Map header;
 
     public static DbWriter dbWriter;
     public static CsvReader csvReader;
@@ -17,6 +19,9 @@ public class MutationConverter {
         jCommander.setProgramName("Mutation Converter");
         try {
             jCommander.parse(args);
+            if (!params.getConfigPath().equals("")) {
+                //TODO: set location of config file
+            }
             run();
         } catch (ParameterException pe) {
             System.out.println(pe.getMessage());
@@ -28,17 +33,14 @@ public class MutationConverter {
         try {
             System.out.println("inputname is " + params.getInputName());
             System.out.println("output name is " + params.getOutputName());
-            csvReader = new CsvReader();
-            csvReader.setInputFilePath(params.getInputName());
 
+            csvReader = new CsvReader(params.getInputName());
             header = csvReader.getHeader();
 
             dbWriter = new DbWriter(params.getOutputName());
             dbWriter.startConnection();
             dbWriter.createTable(header);
             dbWriter.writeData(csvReader.getData());
-
-            System.out.println(dbWriter.getMutationCounter() + " mutations written to " + params.getOutputName());
 
         } catch (Exception x){
             x.printStackTrace();

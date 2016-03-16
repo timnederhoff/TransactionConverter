@@ -1,36 +1,58 @@
 package Converter;
 
+import com.typesafe.config.Config;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class CsvReader {
 
     private String inputFilePath;
     private BufferedReader br;
+    private Map<String, String> header;
 
-    public void setInputFilePath(String inputFilePath) {
+    public CsvReader(String inputFilePath) {
         this.inputFilePath = inputFilePath;
     }
 
-    public String[] getHeader() throws IOException {
+    public Map getHeader() throws IOException {
+        header = new LinkedHashMap<>();
+
         br = new BufferedReader(new FileReader(inputFilePath));
-        String[] header = br.readLine().split("\",\"");
-        for (int i = 0; i < header.length; i++) {
-            header[i] = header[i].replaceAll("[()\"]", "");
-            header[i] = header[i].replace(" ", "_");
+
+        for (Config col : Configuration.get().bank.getConfigList("columnproperties")) {
+            header.put(col.getString("column.name"), col.getString("data.type"));
+
         }
         return header;
     }
 
-    public List<String[]> getData() throws IOException {
+    public List<List<String>> getData() throws IOException {
+        List<Integer> indices = new ArrayList<>();
+        List<String> csvHeader = Arrays.asList(br.readLine().replace("\"", "").split(","));
+
+        for (String column : header.keySet()) {
+            for (Integer i = 0; i < csvHeader.size(); i++) {
+                if (csvHeader.get(i).equals(column)) {
+                    indices.add(i);
+                }
+            }
+        }
+
         String line;
-        List<String[]> mutaties = new ArrayList<>();
+        String[] lineArray;
+        List<String> values;
+        List<List<String>> mutaties = new ArrayList<>();
         while ((line = br.readLine()) != null) {
+            values = new ArrayList<>();
             line = line.replace("\'", "");
-            mutaties.add(line.split("(?<=\"),(?=\")"));
+            lineArray = line.split("(?<=\"),(?=\")");
+            for (Integer i : indices) {
+                values.add(lineArray[i].replace(",", ""));
+            }
+            mutaties.add(values);
         }
         br.close();
         return mutaties;
