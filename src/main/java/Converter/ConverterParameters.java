@@ -2,7 +2,9 @@ package Converter;
 
 import com.beust.jcommander.Parameter;
 
-public class ConverterParameters {
+import java.io.File;
+
+class ConverterParameters {
     @Parameter(names = { "-i", "-inputfile" }, description = "The location of the input file", required = true)
     private String inputName;
 
@@ -12,14 +14,14 @@ public class ConverterParameters {
     @Parameter(names = { "-c", "-configuration" }, description = "Location of the configuration file", required = false)
     private String configPath = "";
 
-    public String getInputName() {
+    String getInputName() {
         return inputName;
     }
 
-    public String getOutputName() {
+    String getOutputName() {
         return outputName;
     }
 
-    public String getConfigPath() { return configPath; }
+    File getCustomConfig() { return new File(configPath); }
 
 }

@@ -9,19 +9,19 @@ import java.sql.Statement;
 import java.util.List;
 import java.util.Map;
 
-public class DbWriter {
+class DbWriter {
 
     private Connection c;
     private String outputName;
     private String tableName;
     private Statement stmt;
 
-    public DbWriter(String outputName) {
+    DbWriter(String outputName) {
         this.outputName = outputName;
         tableName = "MUTATIONS";
     }
 
-    public void startConnection() throws Exception{
+    void startConnection() throws Exception{
         File outputPath = new File(outputName);
         Files.deleteIfExists(outputPath.toPath());
         Class.forName("org.sqlite.JDBC");
@@ -29,7 +29,7 @@ public class DbWriter {
         c.setAutoCommit(false);
     }
 
-    public void writeData(List<List<String>> mutaties) throws Exception {
+    void writeData(List<List<String>> mutaties) throws Exception {
         stmt = c.createStatement();
         for (List<String> mutatie : mutaties) {
             addToDB(mutatie);
@@ -43,7 +43,7 @@ public class DbWriter {
         stmt.executeUpdate(sql);
     }
 
-    public void createTable(Map<String, String> header) throws Exception {
+    void createTable(Map<String, String> header) throws Exception {
         Statement stmt = c.createStatement();
         String sql = "CREATE TABLE " + tableName + " (" + headersToString(header) + ")";
         System.out.println("create table sql: " + sql);
@@ -67,7 +67,7 @@ public class DbWriter {
         return snake.substring(0,snake.length()-2);
     }
 
-    public void closeConnection() {
+    void closeConnection() {
         try {
             c.close();
         } catch (SQLException e) {

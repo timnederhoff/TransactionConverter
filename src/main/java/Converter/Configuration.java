@@ -3,29 +3,25 @@ package Converter;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
 
-public class Configuration {
-    private static Configuration instance;
-    public static Config bank;
+import java.io.File;
 
-    private Configuration() {
-        final Config config = ConfigFactory.load();
-        final Config defaultConfig = config.getConfig("default");
+class Configuration {
+//    private static Configuration instance = new Configuration();
+    static Config bank;
 
-        final String bankValue = chooseBank(defaultConfig);
-        bank = config.getConfig("bank").getConfig(bankValue).withFallback(defaultConfig);
-    }
+    private Configuration() { }
 
-    public static Configuration get() {
-        if (instance == null) {
-            instance = new Configuration();
-        }
-
-        return instance;
-    }
-
-    private String chooseBank(final Config defaultConfig) {
+    private static String chooseBank(final Config defaultConfig) {
         final Config bank = ConfigFactory.systemProperties();
         final boolean bankConfigured = bank.hasPath("bank");
         return bankConfigured ? bank.getString("bank") : defaultConfig.getString("bank");
+    }
+
+    static void reloadConfig(File configFile) {
+        final Config config = ConfigFactory.parseFile(configFile);
+
+        final Config defaultConfig = config.getConfig("default");
+        final String bankValue = chooseBank(defaultConfig);
+        bank = config.getConfig("bank").getConfig(bankValue).withFallback(defaultConfig);
     }
 }

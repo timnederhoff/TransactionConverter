@@ -7,29 +7,29 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
 
-public class CsvReader {
+class CsvReader {
 
     private String inputFilePath;
     private BufferedReader br;
     private Map<String, String> header;
 
-    public CsvReader(String inputFilePath) {
+    CsvReader(String inputFilePath) {
         this.inputFilePath = inputFilePath;
     }
 
-    public Map getHeader() throws IOException {
+    Map getHeader() throws IOException {
         header = new LinkedHashMap<>();
 
         br = new BufferedReader(new FileReader(inputFilePath));
 
-        for (Config col : Configuration.get().bank.getConfigList("columnproperties")) {
+        for (Config col : Configuration.bank.getConfigList("columnproperties")) {
             header.put(col.getString("column.name"), col.getString("data.type"));
 
         }
         return header;
     }
 
-    public List<List<String>> getData() throws IOException {
+    List<List<String>> getData() throws IOException {
         List<Integer> indices = new ArrayList<>();
         List<String> csvHeader = Arrays.asList(br.readLine().replace("\"", "").split(","));
 
